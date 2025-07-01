@@ -3,23 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Pages 资源中心 | 网盘存储解决方案</title>
+    <title>蓝奏云存储管理系统</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --secondary: #8b5cf6;
-            --dark: #1e293b;
-            --darker: #0f172a;
-            --light: #f8fafc;
-            --gray: #94a3b8;
-            --light-gray: #e2e8f0;
-            --border: #cbd5e1;
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --gray: #95a5a6;
+            --light-gray: #bdc3c7;
+            --border: #dfe6e9;
             --card-bg: #ffffff;
-            --success: #10b981;
-            --error: #ef4444;
-            --warning: #f59e0b;
+            --header-bg: #2c3e50;
+            --sidebar-bg: #34495e;
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             --shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.1);
             --transition: all 0.3s ease;
@@ -32,49 +34,27 @@
         }
         
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            line-height: 1.6;
-            color: var(--dark);
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
             background: var(--light);
-            transition: background 0.3s ease;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%);
+            color: var(--dark);
+            line-height: 1.6;
             min-height: 100vh;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            grid-template-rows: 70px 1fr;
         }
         
-        body.dark-mode {
-            --dark: #e2e8f0;
-            --darker: #f1f5f9;
-            --light: #0f172a;
-            --gray: #94a3b8;
-            --light-gray: #1e293b;
-            --border: #334155;
-            --card-bg: #1e293b;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            --shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.3);
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-        
-        /* 导航栏样式 */
+        /* 页眉样式 */
         header {
-            background: var(--darker);
+            grid-column: 1 / -1;
+            background: var(--header-bg);
             color: white;
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow);
-        }
-        
-        .header-content {
+            padding: 0 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: var(--shadow);
+            z-index: 100;
         }
         
         .logo {
@@ -82,84 +62,33 @@
             align-items: center;
             gap: 0.75rem;
             font-size: 1.5rem;
-            font-weight: 700;
+            font-weight: 600;
         }
         
         .logo-icon {
-            background: var(--primary);
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-        
-        nav ul {
-            display: flex;
-            gap: 1.5rem;
-            list-style: none;
-        }
-        
-        nav a {
-            color: var(--gray);
-            text-decoration: none;
-            font-weight: 500;
-            transition: var(--transition);
-            position: relative;
-            padding: 0.5rem 0;
-        }
-        
-        nav a:hover, nav a.active {
             color: white;
-        }
-        
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary);
-            transition: var(--transition);
-        }
-        
-        nav a:hover::after, nav a.active::after {
-            width: 100%;
         }
         
         .header-actions {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 1.5rem;
         }
         
-        .theme-toggle, .user-action {
-            background: none;
-            border: none;
-            color: var(--gray);
-            cursor: pointer;
-            font-size: 1.25rem;
-            transition: var(--transition);
-        }
-        
-        .theme-toggle:hover, .user-action:hover {
-            color: white;
-        }
-        
-        /* 用户区域 */
         .user-info {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
         }
         
         .user-avatar {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             display: flex;
             align-items: center;
             justify-content: center;
@@ -167,187 +96,182 @@
             font-weight: bold;
         }
         
-        /* 主要内容区域 */
-        main {
-            padding: 3rem 0;
-        }
-        
-        .hero {
-            text-align: center;
-            padding: 3rem 0;
-            margin-bottom: 3rem;
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
-            border-radius: 16px;
-        }
-        
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--dark);
-        }
-        
-        .hero p {
-            font-size: 1.25rem;
-            max-width: 700px;
-            margin: 0 auto 2rem;
-            color: var(--gray);
-        }
-        
-        .section-title {
-            font-size: 1.75rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            padding-bottom: 0.75rem;
-        }
-        
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 60px;
-            height: 3px;
+        .role-badge {
             background: var(--primary);
-        }
-        
-        /* 文件管理区域 */
-        .file-manager {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-        
-        @media (max-width: 768px) {
-            .file-manager {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .upload-section, .download-section {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-        }
-        
-        .upload-section {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(37, 99, 235, 0.05) 100%);
-        }
-        
-        .download-section {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(245, 158, 11, 0.05) 100%);
-        }
-        
-        /* 表单样式 */
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
             font-weight: 500;
-            color: var(--dark);
         }
         
-        .form-control {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background: var(--light);
-            color: var(--dark);
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-        
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
-        }
-        
-        /* 文件上传区域 */
-        .upload-area {
-            border: 2px dashed var(--border);
-            border-radius: 12px;
-            padding: 2rem;
-            text-align: center;
-            margin-bottom: 1.5rem;
-            transition: var(--transition);
-            cursor: pointer;
-            position: relative;
-            background: rgba(255, 255, 255, 0.2);
-        }
-        
-        .upload-area:hover {
-            border-color: var(--primary);
-            background: rgba(37, 99, 235, 0.1);
-        }
-        
-        .upload-icon {
-            font-size: 3rem;
-            color: var(--gray);
-            margin-bottom: 1rem;
-        }
-        
-        /* 文件列表 */
-        .file-list {
-            margin-top: 1.5rem;
-            max-height: 400px;
+        /* 侧边栏样式 */
+        .sidebar {
+            background: var(--sidebar-bg);
+            color: white;
+            padding: 1.5rem 0;
             overflow-y: auto;
         }
         
-        .file-item {
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .menu-title {
+            padding: 1rem 1.5rem 0.5rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--light-gray);
+            letter-spacing: 1px;
+        }
+        
+        .menu-item {
+            border-left: 3px solid transparent;
+            transition: var(--transition);
+        }
+        
+        .menu-item.active {
+            border-left-color: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.9rem 1.5rem;
+            color: var(--light-gray);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .menu-item.active .menu-link,
+        .menu-link:hover {
+            color: white;
+        }
+        
+        .menu-icon {
+            width: 24px;
+            text-align: center;
+        }
+        
+        /* 主内容区域 */
+        main {
+            padding: 2rem;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid var(--border);
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-3px);
+        }
+        
+        .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 0.75rem;
-            background: rgba(255, 255, 255, 0.1);
-            transition: var(--transition);
+            margin-bottom: 1.25rem;
         }
         
-        .file-item:hover {
-            background: rgba(37, 99, 235, 0.1);
-            transform: translateX(5px);
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark);
         }
         
-        .file-info {
-            flex: 1;
-        }
-        
-        .file-name {
-            font-weight: 500;
-            margin-bottom: 0.25rem;
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+            background: rgba(52, 152, 219, 0.1);
         }
         
-        .file-meta {
-            font-size: 0.9rem;
+        .card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            color: var(--dark);
+        }
+        
+        .card-description {
             color: var(--gray);
-            display: flex;
-            gap: 1rem;
+            font-size: 0.9rem;
         }
         
-        /* 按钮样式 */
+        /* 存储卡片 */
+        .storage-card {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, var(--primary), #1a5276);
+            color: white;
+            border: none;
+        }
+        
+        .storage-card .card-title,
+        .storage-card .card-value,
+        .storage-card .card-description {
+            color: white;
+        }
+        
+        .storage-card .card-icon {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+        
+        .progress-container {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: white;
+            width: 65%;
+        }
+        
+        .storage-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+        
         .btn {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
             background: var(--primary);
             color: white;
-            padding: 0.75rem 1.75rem;
+            padding: 0.75rem 1.5rem;
             border-radius: 8px;
             text-decoration: none;
-            font-weight: 500;
-            transition: var(--transition);
+            font-weight: 600;
             border: none;
             cursor: pointer;
-            text-align: center;
+            transition: var(--transition);
         }
         
         .btn:hover {
@@ -358,181 +282,232 @@
         
         .btn-outline {
             background: transparent;
-            border: 1px solid var(--primary);
+            border: 2px solid var(--primary);
             color: var(--primary);
         }
         
         .btn-outline:hover {
-            background: rgba(37, 99, 235, 0.1);
+            background: rgba(52, 152, 219, 0.1);
         }
         
-        .btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-        }
-        
-        /* 配置区域 */
-        .config-section {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            margin-top: 3rem;
-            border: 1px solid var(--border);
-        }
-        
-        .config-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-        
-        @media (max-width: 768px) {
-            .config-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .cloud-storage-info {
+        /* 文件管理 */
+        .section-header {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
         }
         
-        .storage-progress {
-            height: 10px;
-            background: var(--light-gray);
-            border-radius: 5px;
-            margin: 1rem 0;
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .file-manager {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
             overflow: hidden;
         }
         
-        .storage-used {
-            height: 100%;
-            background: var(--primary);
-            border-radius: 5px;
-            width: 35%;
+        .file-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            padding: 0 1.5rem;
         }
         
-        /* 页脚 */
-        footer {
-            background: var(--darker);
+        .file-tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            position: relative;
+            font-weight: 500;
             color: var(--gray);
-            padding: 3rem 0 1.5rem;
-            margin-top: 3rem;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .footer-column h4 {
-            color: white;
-            margin-bottom: 1.25rem;
-            font-size: 1.125rem;
-        }
-        
-        .footer-links {
-            list-style: none;
-        }
-        
-        .footer-links li {
-            margin-bottom: 0.75rem;
-        }
-        
-        .footer-links a {
-            color: var(--gray);
-            text-decoration: none;
             transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
         
-        .footer-links a:hover {
-            color: white;
+        .file-tab.active {
+            color: var(--primary);
+            font-weight: 600;
         }
         
-        .copyright {
-            text-align: center;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border);
+        .file-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary);
         }
         
-        /* 消息提示 */
-        .alert {
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        
-        .alert-success {
-            background: rgba(16, 185, 129, 0.15);
-            border: 1px solid var(--success);
-            color: var(--success);
-        }
-        
-        .alert-error {
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid var(--error);
-            color: var(--error);
-        }
-        
-        .alert-info {
-            background: rgba(37, 99, 235, 0.15);
-            border: 1px solid var(--primary);
+        .file-tab:hover {
             color: var(--primary);
         }
         
-        /* 文件图标 */
-        .file-icon {
-            font-size: 1.2rem;
+        .file-content {
+            padding: 1.5rem;
         }
         
-        .file-pdf {
-            color: #e53e3e;
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.5rem;
         }
         
-        .file-image {
-            color: #38a169;
+        .file-item {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: var(--transition);
         }
         
-        .file-zip {
-            color: #d69e2e;
+        .file-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
         }
         
-        .file-doc {
-            color: #3182ce;
+        .file-preview {
+            height: 140px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+        
+        .file-info {
+            padding: 1rem;
+        }
+        
+        .file-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .file-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        
+        /* 用户管理 */
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .user-table th {
+            background: #f8f9fa;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .user-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .user-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .user-role {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .role-admin {
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--primary);
+        }
+        
+        .role-user {
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--success);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .action-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .action-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
         }
         
         /* 响应式设计 */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
+        @media (max-width: 992px) {
+            body {
+                grid-template-columns: 70px 1fr;
             }
             
-            nav ul {
-                flex-wrap: wrap;
+            .logo-text, .menu-text {
+                display: none;
+            }
+            
+            .menu-link {
                 justify-content: center;
             }
             
-            .hero {
-                padding: 2rem 1rem;
+            .menu-title {
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
             }
             
-            .hero h1 {
-                font-size: 2rem;
+            .storage-card {
+                grid-column: 1;
             }
             
-            .hero p {
-                font-size: 1rem;
+            .file-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .file-tabs {
+                overflow-x: auto;
             }
         }
     </style>
@@ -540,499 +515,442 @@
 <body>
     <!-- 页眉 -->
     <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <div class="logo-icon">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                    </div>
-                    <span>资源中心</span>
-                </div>
-                
-                <nav>
-                    <ul>
-                        <li><a href="#" class="active">首页</a></li>
-                        <li><a href="#">资源库</a></li>
-                        <li><a href="#">上传记录</a></li>
-                        <li><a href="#">帮助中心</a></li>
-                    </ul>
-                </nav>
-                
-                <div class="header-actions">
-                    <button class="theme-toggle" id="themeToggle">🌙</button>
-                    <div class="user-info">
-                        <div class="user-avatar">U</div>
-                        <span>用户123</span>
-                    </div>
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-cloud"></i>
+            </div>
+            <span class="logo-text">蓝奏云存储管理系统</span>
+        </div>
+        
+        <div class="header-actions">
+            <div class="user-info">
+                <div class="user-avatar">张</div>
+                <div>
+                    <div>张三</div>
+                    <div class="role-badge">管理员</div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- 主要内容 -->
-    <main class="container">
-        <div class="hero">
-            <h1>共享资源，创造价值</h1>
-            <p>上传您的文件到安全网盘，与社区成员分享知识资源。所有文件经过安全扫描，确保下载安全。</p>
+    <!-- 侧边栏 -->
+    <nav class="sidebar">
+        <ul class="sidebar-menu">
+            <li class="menu-title">主菜单</li>
+            <li class="menu-item active">
+                <a href="#" class="menu-link">
+                    <div class="menu-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <span class="menu-text">控制面板</span>
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="#" class="menu-link">
+                    <div class="menu-icon">
+                        <i class="fas fa-file"></i>
+                    </div>
+                    <span class="menu-text">文件管理</span>
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="#" class="menu-link">
+                    <div class="menu-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <span class="menu-text">用户管理</span>
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="#" class="menu-link">
+                    <div class="menu-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <span class="menu-text">存储分析</span>
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="#" class="menu-link">
+                    <div class="menu-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <span class="menu-text">系统设置</span>
+                </a>
+            </li>
+            
+            <li class="menu-title">用户空间</li>
+            
+            <li class="menu-item">
+                <a href="#" class="menu-link">
+                    <div class="menu-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <span class="menu-text">上传文件</span>
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="#" class="menu-link">
+                    <div class="menu-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <span class="menu-text">操作记录</span>
+                </a>
+            </li>
+            
+            <li class="menu-item">
+                <a href="#" class="menu-link">
+                    <div class="menu-icon">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <span class="menu-text">分享管理</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- 主内容 -->
+    <main>
+        <div class="dashboard">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">总文件数</h3>
+                    <div class="card-icon">
+                        <i class="fas fa-file"></i>
+                    </div>
+                </div>
+                <div class="card-value">1,248</div>
+                <p class="card-description">较上月增长 18%</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">在线用户</h3>
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="card-value">24</div>
+                <p class="card-description">当前活跃用户</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">下载次数</h3>
+                    <div class="card-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                </div>
+                <div class="card-value">5,876</div>
+                <p class="card-description">今日下载 245 次</p>
+            </div>
+            
+            <div class="card storage-card">
+                <div class="card-header">
+                    <h3 class="card-title">存储空间使用</h3>
+                    <div class="card-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                </div>
+                <div class="card-value">86.5 GB</div>
+                <p class="card-description">已使用 65% 的存储空间</p>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 65%"></div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-top: 1rem;">
+                    <div>可用空间: 46.2 GB</div>
+                    <div>总空间: 132.7 GB</div>
+                </div>
+                
+                <button class="btn" style="margin-top: 1.5rem; background: white; color: var(--primary);">
+                    <i class="fas fa-plus-circle"></i> 升级存储空间
+                </button>
+            </div>
+        </div>
+        
+        <div class="section-header">
+            <h2 class="section-title">文件管理</h2>
+            <div>
+                <button class="btn">
+                    <i class="fas fa-plus"></i> 上传文件
+                </button>
+                <button class="btn btn-outline" style="margin-left: 0.5rem;">
+                    <i class="fas fa-sync-alt"></i> 刷新
+                </button>
+            </div>
+        </div>
+        
+        <div class="file-manager">
+            <div class="file-tabs">
+                <div class="file-tab active">全部文件</div>
+                <div class="file-tab">文档</div>
+                <div class="file-tab">图片</div>
+                <div class="file-tab">视频</div>
+                <div class="file-tab">其他</div>
+            </div>
+            
+            <div class="file-content">
+                <div class="file-grid">
+                    <div class="file-item">
+                        <div class="file-preview" style="background: #e3f2fd;">
+                            <i class="fas fa-file-pdf" style="color: #e74c3c;"></i>
+                        </div>
+                        <div class="file-info">
+                            <div class="file-name">项目需求文档.pdf</div>
+                            <div class="file-meta">
+                                <span>12.5 MB</span>
+                                <span>2023-10-15</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="file-item">
+                        <div class="file-preview" style="background: #e8f5e9;">
+                            <i class="fas fa-file-image" style="color: #2ecc71;"></i>
+                        </div>
+                        <div class="file-info">
+                            <div class="file-name">产品设计图.png</div>
+                            <div class="file-meta">
+                                <span>8.7 MB</span>
+                                <span>2023-10-14</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="file-item">
+                        <div class="file-preview" style="background: #fff3e0;">
+                            <i class="fas fa-file-video" style="color: #f39c12;"></i>
+                        </div>
+                        <div class="file-info">
+                            <div class="file-name">产品演示视频.mp4</div>
+                            <div class="file-meta">
+                                <span>245.6 MB</span>
+                                <span>2023-10-12</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="file-item">
+                        <div class="file-preview" style="background: #f3e5f5;">
+                            <i class="fas fa-file-archive" style="color: #9b59b6;"></i>
+                        </div>
+                        <div class="file-info">
+                            <div class="file-name">源代码.zip</div>
+                            <div class="file-meta">
+                                <span>56.3 MB</span>
+                                <span>2023-10-10</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="file-item">
+                        <div class="file-preview" style="background: #e0f7fa;">
+                            <i class="fas fa-file-word" style="color: #3498db;"></i>
+                        </div>
+                        <div class="file-info">
+                            <div class="file-name">项目报告.docx</div>
+                            <div class="file-meta">
+                                <span>5.2 MB</span>
+                                <span>2023-10-08</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="file-item">
+                        <div class="file-preview" style="background: #fff8e1;">
+                            <i class="fas fa-file-excel" style="color: #27ae60;"></i>
+                        </div>
+                        <div class="file-info">
+                            <div class="file-name">数据分析表.xlsx</div>
+                            <div class="file-meta">
+                                <span>7.8 MB</span>
+                                <span>2023-10-05</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-header" style="margin-top: 2rem;">
+            <h2 class="section-title">用户管理</h2>
             <button class="btn">
-                <i class="fas fa-cloud-upload-alt"></i> 立即上传
+                <i class="fas fa-user-plus"></i> 添加用户
             </button>
         </div>
         
-        <div id="messageArea"></div>
-        
         <div class="file-manager">
-            <div class="upload-section">
-                <h2 class="section-title">上传资源</h2>
-                <p>将您的文件上传到安全网盘，与社区成员共享</p>
-                
-                <div class="form-group">
-                    <label>文件名称</label>
-                    <input type="text" class="form-control" id="fileName" placeholder="例如：前端开发手册.pdf">
-                </div>
-                
-                <div class="form-group">
-                    <label>文件描述</label>
-                    <textarea class="form-control" id="fileDescription" rows="3" placeholder="文件内容简要说明..."></textarea>
-                </div>
-                
-                <div class="upload-area" id="dropArea">
-                    <div class="upload-icon">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                    </div>
-                    <h3>点击或拖放文件到此处</h3>
-                    <p>支持PDF、ZIP、图片等格式，最大50MB</p>
-                    <input type="file" id="fileInput" style="display: none;">
-                </div>
-                
-                <div class="form-group">
-                    <button class="btn" id="uploadBtn" disabled>
-                        <i class="fas fa-upload"></i> 上传到网盘
-                    </button>
-                </div>
-            </div>
-            
-            <div class="download-section">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                    <h2 class="section-title">资源下载</h2>
-                    <button class="btn btn-outline btn-sm" id="refreshBtn">
-                        <i class="fas fa-sync-alt"></i> 刷新列表
-                    </button>
-                </div>
-                
-                <div class="file-list" id="fileList">
-                    <div class="file-item">
-                        <div class="file-info">
-                            <div class="file-name">
-                                <i class="fas fa-file-pdf file-icon file-pdf"></i>
-                                前端开发手册.pdf
+            <table class="user-table">
+                <thead>
+                    <tr>
+                        <th>用户</th>
+                        <th>角色</th>
+                        <th>存储使用</th>
+                        <th>最后登录</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="user-info" style="gap: 0.75rem;">
+                                <div class="user-avatar">张</div>
+                                <div>
+                                    <div>张三</div>
+                                    <div style="font-size: 0.85rem; color: var(--gray);">admin@example.com</div>
+                                </div>
                             </div>
-                            <div class="file-meta">
-                                <span><i class="fas fa-database"></i> 2.4 MB</span>
-                                <span><i class="fas fa-calendar"></i> 2023-10-15</span>
-                                <span><i class="fas fa-user"></i> 张技术</span>
+                        </td>
+                        <td><span class="user-role role-admin">管理员</span></td>
+                        <td>24.5 GB</td>
+                        <td>2023-10-15 14:30</td>
+                        <td><span style="color: var(--success);">在线</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </div>
-                        </div>
-                        <button class="btn btn-outline btn-sm download-btn">
-                            <i class="fas fa-download"></i> 下载
-                        </button>
-                    </div>
-                    
-                    <div class="file-item">
-                        <div class="file-info">
-                            <div class="file-name">
-                                <i class="fas fa-file-archive file-icon file-zip"></i>
-                                UI设计素材.zip
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="user-info" style="gap: 0.75rem;">
+                                <div class="user-avatar">李</div>
+                                <div>
+                                    <div>李四</div>
+                                    <div style="font-size: 0.85rem; color: var(--gray);">lisi@example.com</div>
+                                </div>
                             </div>
-                            <div class="file-meta">
-                                <span><i class="fas fa-database"></i> 15.2 MB</span>
-                                <span><i class="fas fa-calendar"></i> 2023-10-10</span>
-                                <span><i class="fas fa-user"></i> 李设计师</span>
+                        </td>
+                        <td><span class="user-role role-user">普通用户</span></td>
+                        <td>12.3 GB</td>
+                        <td>2023-10-15 10:15</td>
+                        <td><span style="color: var(--success);">在线</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </div>
-                        </div>
-                        <button class="btn btn-outline btn-sm download-btn">
-                            <i class="fas fa-download"></i> 下载
-                        </button>
-                    </div>
-                    
-                    <div class="file-item">
-                        <div class="file-info">
-                            <div class="file-name">
-                                <i class="fas fa-file-image file-icon file-image"></i>
-                                网站架构图.png
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="user-info" style="gap: 0.75rem;">
+                                <div class="user-avatar">王</div>
+                                <div>
+                                    <div>王五</div>
+                                    <div style="font-size: 0.85rem; color: var(--gray);">wangwu@example.com</div>
+                                </div>
                             </div>
-                            <div class="file-meta">
-                                <span><i class="fas fa-database"></i> 1.8 MB</span>
-                                <span><i class="fas fa-calendar"></i> 2023-10-05</span>
-                                <span><i class="fas fa-user"></i> 王架构师</span>
+                        </td>
+                        <td><span class="user-role role-user">普通用户</span></td>
+                        <td>8.7 GB</td>
+                        <td>2023-10-14 16:45</td>
+                        <td><span style="color: var(--gray);">离线</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </div>
-                        </div>
-                        <button class="btn btn-outline btn-sm download-btn">
-                            <i class="fas fa-download"></i> 下载
-                        </button>
-                    </div>
-                    
-                    <div class="file-item">
-                        <div class="file-info">
-                            <div class="file-name">
-                                <i class="fas fa-file-word file-icon file-doc"></i>
-                                API设计规范.docx
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="user-info" style="gap: 0.75rem;">
+                                <div class="user-avatar">赵</div>
+                                <div>
+                                    <div>赵六</div>
+                                    <div style="font-size: 0.85rem; color: var(--gray);">zhaoliu@example.com</div>
+                                </div>
                             </div>
-                            <div class="file-meta">
-                                <span><i class="fas fa-database"></i> 0.8 MB</span>
-                                <span><i class="fas fa-calendar"></i> 2023-10-01</span>
-                                <span><i class="fas fa-user"></i> 赵开发</span>
+                        </td>
+                        <td><span class="user-role role-user">普通用户</span></td>
+                        <td>15.2 GB</td>
+                        <td>2023-10-14 09:20</td>
+                        <td><span style="color: var(--success);">在线</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </div>
-                        </div>
-                        <button class="btn btn-outline btn-sm download-btn">
-                            <i class="fas fa-download"></i> 下载
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="config-section">
-            <h2 class="section-title">云存储配置</h2>
-            
-            <div class="config-grid">
-                <div class="cloud-storage-info">
-                    <h3><i class="fas fa-cloud"></i> Dropbox 云存储</h3>
-                    <p>所有上传的文件都安全存储在 Dropbox 云存储中，保障文件安全性和可访问性。</p>
-                    
-                    <div class="storage-progress">
-                        <div class="storage-used"></div>
-                    </div>
-                    <p>已使用 350MB / 2GB</p>
-                    
-                    <div style="margin-top: 1rem;">
-                        <button class="btn btn-outline">
-                            <i class="fas fa-cog"></i> 管理存储
-                        </button>
-                    </div>
-                </div>
-                
-                <div>
-                    <div class="form-group">
-                        <label>访问令牌</label>
-                        <input type="password" class="form-control" id="accessToken" placeholder="输入您的网盘访问令牌">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>存储路径</label>
-                        <input type="text" class="form-control" id="storagePath" value="/community_resources/">
-                    </div>
-                    
-                    <div class="form-group">
-                        <button class="btn">
-                            <i class="fas fa-save"></i> 保存配置
-                        </button>
-                    </div>
-                    
-                    <div class="alert alert-info">
-                        <i class="fas fa-info-circle"></i>
-                        获取访问令牌：Dropbox 开发者平台 → 创建应用 → 生成访问令牌
-                    </div>
-                </div>
-            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </main>
-    
-    <!-- 页脚 -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h4>关于资源中心</h4>
-                    <p>基于 GitHub Pages 构建的资源共享平台，使用云存储服务保障文件安全和持久访问。</p>
-                </div>
-                
-                <div class="footer-column">
-                    <h4>快速链接</h4>
-                    <ul class="footer-links">
-                        <li><a href="#"><i class="fas fa-home"></i> 首页</a></li>
-                        <li><a href="#"><i class="fas fa-cloud-upload-alt"></i> 上传资源</a></li>
-                        <li><a href="#"><i class="fas fa-history"></i> 上传记录</a></li>
-                        <li><a href="#"><i class="fas fa-question-circle"></i> 帮助中心</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h4>资源分类</h4>
-                    <ul class="footer-links">
-                        <li><a href="#"><i class="fas fa-file-pdf"></i> 文档资料</a></li>
-                        <li><a href="#"><i class="fas fa-file-image"></i> 设计素材</a></li>
-                        <li><a href="#"><i class="fas fa-file-code"></i> 代码示例</a></li>
-                        <li><a href="#"><i class="fas fa-file-video"></i> 视频教程</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h4>联系我们</h4>
-                    <ul class="footer-links">
-                        <li><a href="#"><i class="fab fa-github"></i> GitHub</a></li>
-                        <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
-                        <li><a href="#"><i class="fas fa-envelope"></i> 邮箱支持</a></li>
-                        <li><a href="#"><i class="fas fa-comments"></i> 社区论坛</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="copyright">
-                <p>© 2023 GitHub Pages 资源中心 | 基于 GitHub Pages 构建 | 使用 Dropbox 云存储服务</p>
-            </div>
-        </div>
-    </footer>
-    
+
     <script>
-        // 应用状态管理
-        const state = {
-            selectedFile: null,
-            accessToken: '',
-            storagePath: '/community_resources/'
-        };
+        // 初始化图表
+        function initCharts() {
+            // 模拟图表初始化
+            console.log("图表初始化完成");
+        }
         
-        // DOM元素
-        const dom = {
-            themeToggle: document.getElementById('themeToggle'),
-            dropArea: document.getElementById('dropArea'),
-            fileInput: document.getElementById('fileInput'),
-            uploadBtn: document.getElementById('uploadBtn'),
-            fileName: document.getElementById('fileName'),
-            fileDescription: document.getElementById('fileDescription'),
-            fileList: document.getElementById('fileList'),
-            refreshBtn: document.getElementById('refreshBtn'),
-            accessToken: document.getElementById('accessToken'),
-            storagePath: document.getElementById('storagePath'),
-            messageArea: document.getElementById('messageArea')
-        };
+        // 初始化标签页
+        function initTabs() {
+            const tabs = document.querySelectorAll('.file-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        }
+        
+        // 初始化菜单
+        function initMenu() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        }
         
         // 初始化应用
         function initApp() {
-            // 设置事件监听器
-            setupEventListeners();
+            initCharts();
+            initTabs();
+            initMenu();
             
-            // 模拟加载文件列表
-            simulateFileLoading();
-        }
-        
-        // 模拟文件加载效果
-        function simulateFileLoading() {
-            dom.fileList.innerHTML = `
-                <div class="file-item" style="opacity: 0.7;">
-                    <div class="file-info">
-                        <div class="file-name" style="width: 70%; height: 20px; background: var(--light-gray); border-radius: 4px;"></div>
-                        <div class="file-meta" style="width: 90%; height: 15px; background: var(--light-gray); border-radius: 4px; margin-top: 8px;"></div>
-                    </div>
-                    <div style="width: 80px; height: 32px; background: var(--light-gray); border-radius: 6px;"></div>
-                </div>
-                <div class="file-item" style="opacity: 0.5;">
-                    <div class="file-info">
-                        <div class="file-name" style="width: 60%; height: 20px; background: var(--light-gray); border-radius: 4px;"></div>
-                        <div class="file-meta" style="width: 80%; height: 15px; background: var(--light-gray); border-radius: 4px; margin-top: 8px;"></div>
-                    </div>
-                    <div style="width: 80px; height: 32px; background: var(--light-gray); border-radius: 6px;"></div>
-                </div>
-            `;
-            
-            setTimeout(() => {
-                // 实际应用中这里会从API加载数据
-                // 这里我们保留模拟数据
-            }, 1500);
-        }
-        
-        // 显示消息
-        function showMessage(message, type = 'info') {
-            const alert = document.createElement('div');
-            alert.className = `alert alert-${type}`;
-            alert.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-                ${message}
-            `;
-            
-            dom.messageArea.innerHTML = '';
-            dom.messageArea.appendChild(alert);
-            
-            // 5秒后自动消失
-            if (type !== 'error') {
-                setTimeout(() => {
-                    alert.style.opacity = '0';
-                    setTimeout(() => alert.remove(), 300);
-                }, 5000);
-            }
-        }
-        
-        // 上传文件到网盘
-        function uploadFileToCloud() {
-            if (!state.selectedFile) {
-                showMessage('请先选择文件', 'error');
-                return;
-            }
-            
-            // 显示上传中状态
-            dom.uploadBtn.disabled = true;
-            dom.uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 上传中...';
-            
-            // 模拟上传过程
-            setTimeout(() => {
-                const fileName = dom.fileName.value.trim() || state.selectedFile.name;
-                
-                // 创建新文件项
-                const newFile = document.createElement('div');
-                newFile.className = 'file-item';
-                newFile.innerHTML = `
-                    <div class="file-info">
-                        <div class="file-name">
-                            <i class="fas fa-file-${getFileIcon(fileName)} file-icon file-${getFileType(fileName)}"></i>
-                            ${fileName}
-                        </div>
-                        <div class="file-meta">
-                            <span><i class="fas fa-database"></i> ${(state.selectedFile.size / (1024 * 1024)).toFixed(2)} MB</span>
-                            <span><i class="fas fa-calendar"></i> ${new Date().toLocaleDateString()}</span>
-                            <span><i class="fas fa-user"></i> 用户123</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-outline btn-sm download-btn">
-                        <i class="fas fa-download"></i> 下载
-                    </button>
-                `;
-                
-                // 添加到文件列表顶部
-                dom.fileList.insertBefore(newFile, dom.fileList.firstChild);
-                
-                showMessage(`文件 "${fileName}" 上传成功！`, 'success');
-                
-                // 重置表单
-                resetUploadForm();
-                
-            }, 2000);
-        }
-        
-        // 获取文件图标
-        function getFileIcon(fileName) {
-            const ext = fileName.split('.').pop().toLowerCase();
-            if (['pdf'].includes(ext)) return 'pdf';
-            if (['jpg', 'jpeg', 'png', 'gif', 'bmp'].includes(ext)) return 'image';
-            if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) return 'archive';
-            if (['doc', 'docx'].includes(ext)) return 'word';
-            if (['xls', 'xlsx'].includes(ext)) return 'excel';
-            if (['ppt', 'pptx'].includes(ext)) return 'powerpoint';
-            return 'alt';
-        }
-        
-        // 获取文件类型
-        function getFileType(fileName) {
-            const ext = fileName.split('.').pop().toLowerCase();
-            if (['pdf'].includes(ext)) return 'pdf';
-            if (['jpg', 'jpeg', 'png', 'gif', 'bmp'].includes(ext)) return 'image';
-            if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) return 'zip';
-            if (['doc', 'docx'].includes(ext)) return 'doc';
-            return 'doc';
-        }
-        
-        // 重置上传表单
-        function resetUploadForm() {
-            state.selectedFile = null;
-            dom.fileName.value = '';
-            dom.fileDescription.value = '';
-            dom.uploadBtn.disabled = true;
-            dom.uploadBtn.innerHTML = '<i class="fas fa-upload"></i> 上传到网盘';
-            dom.dropArea.innerHTML = `
-                <div class="upload-icon">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                </div>
-                <h3>点击或拖放文件到此处</h3>
-                <p>支持PDF、ZIP、图片等格式，最大50MB</p>
-            `;
-        }
-        
-        // 设置事件监听器
-        function setupEventListeners() {
-            // 主题切换
-            dom.themeToggle.addEventListener('click', () => {
-                document.body.classList.toggle('dark-mode');
-                dom.themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-            });
-            
-            // 文件选择
-            dom.dropArea.addEventListener('click', () => {
-                dom.fileInput.click();
-            });
-            
-            // 拖放功能
-            dom.dropArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dom.dropArea.style.borderColor = 'var(--primary)';
-                dom.dropArea.style.backgroundColor = 'rgba(37, 99, 235, 0.1)';
-            });
-            
-            dom.dropArea.addEventListener('dragleave', () => {
-                dom.dropArea.style.borderColor = 'var(--border)';
-                dom.dropArea.style.backgroundColor = '';
-            });
-            
-            dom.dropArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dom.dropArea.style.borderColor = 'var(--border)';
-                dom.dropArea.style.backgroundColor = '';
-                
-                if (e.dataTransfer.files.length) {
-                    handleFileSelect(e.dataTransfer.files[0]);
+            // 模拟在线用户数变化
+            setInterval(() => {
+                const onlineUsers = document.querySelector('.card-value:nth-child(2)');
+                const currentUsers = parseInt(onlineUsers.textContent);
+                const newUsers = currentUsers + (Math.random() > 0.5 ? 1 : -1);
+                if (newUsers > 0 && newUsers < 50) {
+                    onlineUsers.textContent = newUsers;
                 }
-            });
-            
-            // 文件输入变化
-            dom.fileInput.addEventListener('change', function() {
-                if (this.files.length) {
-                    handleFileSelect(this.files[0]);
-                }
-            });
-            
-            // 上传按钮
-            dom.uploadBtn.addEventListener('click', uploadFileToCloud);
-            
-            // 刷新按钮
-            dom.refreshBtn.addEventListener('click', simulateFileLoading);
-            
-            // 下载按钮
-            document.addEventListener('click', function(e) {
-                if (e.target.closest('.download-btn')) {
-                    const fileName = e.target.closest('.file-item').querySelector('.file-name').textContent.trim();
-                    showMessage(`开始下载: ${fileName}`, 'info');
-                    // 实际应用中这里会触发文件下载
-                }
-            });
+            }, 5000);
         }
         
-        // 处理文件选择
-        function handleFileSelect(file) {
-            // 检查文件大小 (最大50MB)
-            if (file.size > 50 * 1024 * 1024) {
-                showMessage('文件大小不能超过50MB', 'error');
-                return;
-            }
-            
-            state.selectedFile = file;
-            
-            // 更新UI
-            dom.uploadBtn.disabled = false;
-            dom.dropArea.innerHTML = `
-                <div class="upload-icon">
-                    <i class="fas fa-file"></i>
-                </div>
-                <h3>${file.name}</h3>
-                <p>${(file.size / (1024 * 1024)).toFixed(2)} MB</p>
-            `;
-            
-            // 自动填充文件名
-            if (!dom.fileName.value.trim()) {
-                dom.fileName.value = file.name;
-            }
-        }
-        
-        // 初始化应用
+        // 页面加载完成后初始化
         window.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
 </html>
-    
