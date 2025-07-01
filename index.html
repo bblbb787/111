@@ -3,108 +3,550 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的技术博客</title>
+    <title>技术博客 | GitHub Pages完整博客系统</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         :root {
             --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #8b5cf6;
             --dark: #1e293b;
+            --darker: #0f172a;
             --light: #f8fafc;
+            --gray: #94a3b8;
+            --light-gray: #e2e8f0;
+            --border: #cbd5e1;
+            --card-bg: #ffffff;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
         }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+        
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             line-height: 1.6;
             color: var(--dark);
             background: var(--light);
+            transition: background 0.3s ease;
         }
-        header {
-            background: var(--dark);
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        
+        body.dark-mode {
+            --dark: #e2e8f0;
+            --darker: #f1f5f9;
+            --light: #0f172a;
+            --gray: #94a3b8;
+            --light-gray: #1e293b;
+            --border: #334155;
+            --card-bg: #1e293b;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            --shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.3);
         }
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 0 1.5rem;
         }
-        nav {
+        
+        /* 导航栏样式 */
+        header {
+            background: var(--darker);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        
+        .header-content {
             display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 1rem;
+            justify-content: space-between;
+            align-items: center;
         }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .logo-icon {
+            background: var(--primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        nav ul {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+        
         nav a {
-            color: #93c5fd;
+            color: var(--gray);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0;
         }
-        nav a:hover {
+        
+        nav a:hover, nav a.active {
             color: white;
-            text-decoration: underline;
         }
-        .posts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: var(--transition);
         }
-        .post-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
+        
+        nav a:hover::after, nav a.active::after {
+            width: 100%;
         }
-        .post-card:hover {
-            transform: translateY(-5px);
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
-        .post-img {
-            height: 200px;
-            background: linear-gradient(120deg, #a5b4fc, #60a5fa);
+        
+        .theme-toggle, .user-action {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 1.25rem;
+            transition: var(--transition);
+        }
+        
+        .theme-toggle:hover, .user-action:hover {
+            color: white;
+        }
+        
+        /* 用户区域 */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 2rem;
             font-weight: bold;
         }
-        .post-content {
-            padding: 1.5rem;
+        
+        /* 主要内容区域 */
+        main {
+            padding: 2rem 0;
         }
-        .post-content h3 {
-            margin-bottom: 0.5rem;
+        
+        /* 仪表盘样式 */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+        
+        .sidebar {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: var(--transition);
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: rgba(37, 99, 235, 0.1);
             color: var(--primary);
         }
+        
+        .content-area {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .section-title {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.75rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        /* 文章网格 */
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .post-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            border: 1px solid var(--border);
+        }
+        
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .post-img {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .post-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .post-content h3 {
+            margin-bottom: 0.75rem;
+            color: var(--dark);
+            font-size: 1.25rem;
+        }
+        
         .post-meta {
-            color: #64748b;
+            color: var(--gray);
             font-size: 0.9rem;
             margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
+        
+        .post-excerpt {
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            flex-grow: 1;
+        }
+        
         .btn {
             display: inline-block;
             background: var(--primary);
             color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 4px;
+            padding: 0.6rem 1.5rem;
+            border-radius: 6px;
             text-decoration: none;
-            margin-top: 1rem;
             font-weight: 500;
-        }
-        footer {
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
             text-align: center;
-            padding: 2rem;
-            margin-top: 3rem;
-            border-top: 1px solid #e2e8f0;
-            color: #64748b;
         }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: rgba(37, 99, 235, 0.1);
+        }
+        
+        /* 表单样式 */
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--light);
+            color: var(--dark);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+        
+        /* 文件上传区域 */
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+        
+        /* 图片画廊 */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .gallery-item {
+            border-radius: 8px;
+            overflow: hidden;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+        
+        /* 文章详情 */
+        .article-header {
+            margin-bottom: 2rem;
+        }
+        
+        .article-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+        
+        .article-content {
+            line-height: 1.8;
+        }
+        
+        .article-content img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        
+        /* 页脚 */
+        footer {
+            background: var(--darker);
+            color: var(--gray);
+            padding: 3rem 0 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-column h4 {
+            color: white;
+            margin-bottom: 1.25rem;
+            font-size: 1.125rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        /* 模态框 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow: auto;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .close-modal:hover {
+            color: var(--error);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+        }
+        
         @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
             .posts-grid {
                 grid-template-columns: 1fr;
             }
@@ -112,65 +554,694 @@
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
+    <!-- 页眉 -->
     <header>
         <div class="container">
-            <h1>探索技术前沿</h1>
-            <p>分享开发经验与学习心得</p>
-            <nav>
-                <a href="#">首页</a>
-                <a href="#">前端</a>
-                <a href="#">后端</a>
-                <a href="#">DevOps</a>
-                <a href="#">关于我</a>
-            </nav>
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">GP</div>
+                    <span>GitHub Pages博客</span>
+                </div>
+                
+                <nav>
+                    <ul>
+                        <li><a href="#" class="active" data-page="home">首页</a></li>
+                        <li><a href="#" data-page="articles">技术文章</a></li>
+                        <li><a href="#" data-page="gallery">图片库</a></li>
+                        <li><a href="#" data-page="files">资源下载</a></li>
+                        <li><a href="#" data-page="upload">上传资源</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="header-actions">
+                    <button class="theme-toggle" id="themeToggle">🌙</button>
+                    <div id="userSection">
+                        <button class="user-action" id="loginBtn"><i class="fas fa-sign-in-alt"></i> 登录</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
 
-    <!-- 内容区域 -->
+    <!-- 主要内容 -->
     <main class="container">
-        <div class="posts-grid">
-            <!-- 博客文章 1 -->
-            <article class="post-card">
-                <div class="post-img">GitHub</div>
-                <div class="post-content">
-                    <h3>GitHub Pages 部署指南</h3>
-                    <div class="post-meta">2023年10月15日 • 部署教程</div>
-                    <p>详细讲解如何使用 GitHub Pages 免费部署静态网站，包含自定义域名和 HTTPS 配置。</p>
-                    <a href="#" class="btn">阅读全文</a>
+        <!-- 首页内容 -->
+        <div id="homeContent" class="page-content">
+            <div class="hero-banner" style="background: linear-gradient(135deg, var(--darker), var(--dark)); color: white; padding: 4rem 0; text-align: center; border-radius: 10px; margin-bottom: 2rem;">
+                <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">GitHub Pages 完整博客系统</h1>
+                <p style="font-size: 1.25rem; max-width: 700px; margin: 0 auto 2rem; color: var(--gray);">使用GitHub Pages部署的完整博客系统，包含文章、图片、用户系统和文件上传功能</p>
+                <button class="btn" id="exploreBtn">开始探索</button>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                <div style="background: var(--card-bg); border-radius: 10px; padding: 1.5rem; box-shadow: var(--shadow);">
+                    <div style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; text-align: center;">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3 style="text-align: center; margin-bottom: 1rem;">技术文章</h3>
+                    <p style="color: var(--dark);">阅读最新的技术文章，学习前端开发、DevOps和云计算知识。</p>
                 </div>
-            </article>
-
-            <!-- 博客文章 2 -->
-            <article class="post-card">
-                <div class="post-img">CSS</div>
-                <div class="post-content">
-                    <h3>现代 CSS 布局技巧</h3>
-                    <div class="post-meta">2023年9月28日 • 前端开发</div>
-                    <p>探索 Grid 和 Flexbox 的高级用法，创建响应式布局的最佳实践。</p>
-                    <a href="#" class="btn">阅读全文</a>
+                
+                <div style="background: var(--card-bg); border-radius: 10px; padding: 1.5rem; box-shadow: var(--shadow);">
+                    <div style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; text-align: center;">
+                        <i class="fas fa-images"></i>
+                    </div>
+                    <h3 style="text-align: center; margin-bottom: 1rem;">图片库</h3>
+                    <p style="color: var(--dark);">浏览技术相关的图片资源，包含UI设计、架构图和开发截图。</p>
                 </div>
-            </article>
-
-            <!-- 博客文章 3 -->
-            <article class="post-card">
-                <div class="post-img">API</div>
-                <div class="post-content">
-                    <h3>RESTful API 设计原则</h3>
-                    <div class="post-meta">2023年9月10日 • 后端开发</div>
-                    <p>遵循最佳实践设计清晰、一致的 REST API，提升开发者体验。</p>
-                    <a href="#" class="btn">阅读全文</a>
+                
+                <div style="background: var(--card-bg); border-radius: 10px; padding: 1.5rem; box-shadow: var(--shadow);">
+                    <div style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; text-align: center;">
+                        <i class="fas fa-cloud-download-alt"></i>
+                    </div>
+                    <h3 style="text-align: center; margin-bottom: 1rem;">资源下载</h3>
+                    <p style="color: var(--dark);">下载技术文档、代码模板和实用工具，提升你的开发效率。</p>
                 </div>
-            </article>
+            </div>
+        </div>
+        
+        <!-- 文章列表 -->
+        <div id="articlesContent" class="page-content" style="display: none;">
+            <h2 class="section-title">最新技术文章</h2>
+            <div class="posts-grid">
+                <!-- 文章将通过JavaScript动态加载 -->
+            </div>
+        </div>
+        
+        <!-- 图片库 -->
+        <div id="galleryContent" class="page-content" style="display: none;">
+            <h2 class="section-title">技术图片库</h2>
+            <div class="gallery">
+                <!-- 图片将通过JavaScript动态加载 -->
+            </div>
+        </div>
+        
+        <!-- 资源下载 -->
+        <div id="filesContent" class="page-content" style="display: none;">
+            <h2 class="section-title">资源下载</h2>
+            <div id="fileList">
+                <!-- 文件列表将通过JavaScript动态加载 -->
+            </div>
+        </div>
+        
+        <!-- 上传资源 -->
+        <div id="uploadContent" class="page-content" style="display: none;">
+            <h2 class="section-title">上传资源</h2>
+            <div class="form-container">
+                <div class="form-group">
+                    <label>文件名称</label>
+                    <input type="text" class="form-control" id="fileName">
+                </div>
+                
+                <div class="form-group">
+                    <label>文件描述</label>
+                    <textarea class="form-control" id="fileDescription" rows="3"></textarea>
+                </div>
+                
+                <div class="upload-area" id="dropArea">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <h3>点击或拖放文件到此处</h3>
+                    <p>支持PDF、ZIP、图片等格式，最大10MB</p>
+                    <input type="file" id="fileInput" style="display: none;">
+                </div>
+                
+                <div class="form-group">
+                    <button class="btn" id="uploadBtn" disabled>上传文件</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 文章详情 -->
+        <div id="articleDetail" class="page-content" style="display: none;">
+            <!-- 文章内容将通过JavaScript动态加载 -->
         </div>
     </main>
-
+    
     <!-- 页脚 -->
     <footer>
         <div class="container">
-            <p>© 2023 我的技术博客 | 基于 GitHub Pages 构建</p>
-            <p>主题配色：Tailwind CSS 调色板</p>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>关于本博客</h4>
+                    <p>专注于分享Web开发、DevOps和云计算技术，所有内容基于GitHub Pages部署。</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>快速链接</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" data-page="home">首页</a></li>
+                        <li><a href="#" data-page="articles">技术文章</a></li>
+                        <li><a href="#" data-page="gallery">图片库</a></li>
+                        <li><a href="#" data-page="files">资源下载</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>技术分类</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">前端开发</a></li>
+                        <li><a href="#">后端技术</a></li>
+                        <li><a href="#">DevOps</a></li>
+                        <li><a href="#">云计算</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>联系我</h4>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fab fa-github"></i> GitHub</a></li>
+                        <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                        <li><a href="#"><i class="fas fa-envelope"></i> Email</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2023 GitHub Pages技术博客 | 基于GitHub Pages构建 | 本网站仅作为技术演示</p>
+            </div>
         </div>
     </footer>
+    
+    <!-- 登录/注册模态框 -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeAuthModal">&times;</button>
+            <h2 class="section-title" id="authTitle">用户登录</h2>
+            
+            <div class="form-group">
+                <label>用户名</label>
+                <input type="text" class="form-control" id="username">
+            </div>
+            
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" class="form-control" id="password">
+            </div>
+            
+            <div class="form-group">
+                <div id="authMessage" style="color: var(--error); margin-bottom: 1rem; display: none;"></div>
+                <button class="btn" id="authAction">登录</button>
+                <button class="btn btn-outline" id="switchAuth">切换到注册</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 应用状态管理
+        const state = {
+            currentPage: 'home',
+            isLoginModalOpen: false,
+            isLoginMode: true,
+            currentUser: null,
+            selectedArticle: null
+        };
+        
+        // 示例数据
+        const articles = [
+            {
+                id: 1,
+                title: "GitHub Pages 部署完全指南",
+                excerpt: "详细讲解如何使用GitHub Pages免费部署静态网站，包含自定义域名和HTTPS配置。",
+                content: `## GitHub Pages 部署完全指南\n\nGitHub Pages 是 GitHub 提供的免费静态网站托管服务，非常适合部署个人博客、项目文档等静态网站。\n\n### 部署步骤\n\n1. **创建 GitHub 仓库**\n   - 命名格式：\`<用户名>.github.io\`（个人主页）\n   - 或任意命名（项目主页，访问地址：\`<用户名>.github.io/<仓库名>\`）\n\n2. **准备网站文件**\n   - 将网站文件（HTML/CSS/JS）推送到仓库\n   - 主页文件必须命名为 \`index.html\`\n\n3. **启用 GitHub Pages**\n   - 进入仓库 Settings → Pages\n   - Branch 选择 \`main\`\n   - Folder 选择 \`/ (root)\`\n\n4. **访问网站**\n   - 个人主页：\`https://<用户名>.github.io\`\n   - 项目主页：\`https://<用户名>.github.io/<仓库名>\`\n\n### 高级技巧\n\n- **自定义域名**：\n  在仓库添加 \`CNAME\` 文件（内容：\`yourdomain.com\`）\n- **使用 Jekyll 主题**：\n  添加 \`_config.yml\` 文件\n\n\`\`\`yaml\ntheme: minima\ntitle: 我的博客\ndescription: 技术分享与学习笔记\n\`\`\`\n\n> 提示：GitHub Pages 支持自动构建 Jekyll 网站`,
+                category: "部署教程",
+                date: "2023-10-15",
+                image: "https://images.unsplash.com/photo-1556075798-4825dfaaf498?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+                readTime: "8分钟"
+            },
+            {
+                id: 2,
+                title: "现代CSS布局技巧与实践",
+                excerpt: "探索Grid和Flexbox的高级用法，创建响应式布局的最佳实践。",
+                content: `## 现代CSS布局技巧与实践\n\n现代CSS提供了强大的布局工具，如Flexbox和Grid，可以创建复杂且响应式的布局。\n\n### Flexbox 布局\n\nFlexbox 是一维布局模型，非常适合创建灵活的组件布局：\n\n\`\`\`css\n.container {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n\`\`\`\n\n### CSS Grid 布局\n\nGrid 是二维布局系统，适合创建整体页面布局：\n\n\`\`\`css\n.grid-container {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 20px;\n}\n\`\`\`\n\n### 响应式设计技巧\n\n1. 使用相对单位（rem, em, %）\n2. 媒体查询适配不同设备\n3. 使用 clamp() 函数实现流畅缩放\n\n\`\`\`css\nh1 {\n  font-size: clamp(1.5rem, 5vw, 2.5rem);\n}\n\`\`\`\n\n### 实用工具\n\n- 使用 CSS 变量管理设计系统\n- 利用 aspect-ratio 属性控制宽高比\n- 使用 :where() 简化选择器\n\n> 提示：结合Flexbox和Grid可以实现更灵活的布局方案`,
+                category: "前端开发",
+                date: "2023-09-28",
+                image: "https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+                readTime: "12分钟"
+            },
+            {
+                id: 3,
+                title: "RESTful API设计原则与最佳实践",
+                excerpt: "遵循最佳实践设计清晰、一致的REST API，提升开发者体验。",
+                content: `## RESTful API设计原则与最佳实践\n\nRESTful API是现代Web应用的核心，良好的API设计可以提升开发效率和用户体验。\n\n### 核心原则\n\n1. **资源导向**：API应围绕资源设计，而不是操作\n2. **统一接口**：使用标准的HTTP方法（GET, POST, PUT, DELETE）\n3. **无状态**：每个请求应包含所有必要信息\n4. **可缓存**：合理利用HTTP缓存机制\n\n### 最佳实践\n\n- **命名规范**：\n  - 使用名词复数形式（/users 而不是 /user）\n  - 使用小写和连字符（kebab-case）\n\n- **版本控制**：\n  在URL或Header中包含API版本\n\n- **响应格式**：\n  使用JSON格式，包含标准结构：\n  \n  \`\`\`json\n  {\n    "data": {},\n    "error": null,\n    "message": "Success",\n    "status": 200\n  }\n  \`\`\`\n\n### 安全措施\n\n- 使用HTTPS\n- 实施身份验证（JWT, OAuth）\n- 限制请求速率\n- 验证和清理输入数据\n\n> 提示：使用Swagger或OpenAPI规范文档化你的API`,
+                category: "后端开发",
+                date: "2023-09-10",
+                image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+                readTime: "10分钟"
+            }
+        ];
+        
+        const galleryImages = [
+            "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1556075798-4825dfaaf498?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
+        ];
+        
+        const files = [
+            {
+                id: 1,
+                name: "前端开发手册.pdf",
+                description: "包含HTML、CSS和JavaScript最佳实践",
+                size: "2.4 MB",
+                downloads: 128
+            },
+            {
+                id: 2,
+                name: "API设计模板.zip",
+                description: "RESTful API设计模板和示例",
+                size: "1.1 MB",
+                downloads: 86
+            },
+            {
+                id: 3,
+                name: "GitHub Pages部署指南.docx",
+                description: "详细部署指南和常见问题解决",
+                size: "0.8 MB",
+                downloads: 152
+            }
+        ];
+        
+        // DOM元素
+        const dom = {
+            themeToggle: document.getElementById('themeToggle'),
+            loginBtn: document.getElementById('loginBtn'),
+            userSection: document.getElementById('userSection'),
+            authModal: document.getElementById('authModal'),
+            closeAuthModal: document.getElementById('closeAuthModal'),
+            authTitle: document.getElementById('authTitle'),
+            authAction: document.getElementById('authAction'),
+            switchAuth: document.getElementById('switchAuth'),
+            username: document.getElementById('username'),
+            password: document.getElementById('password'),
+            authMessage: document.getElementById('authMessage'),
+            pageContents: document.querySelectorAll('.page-content'),
+            navLinks: document.querySelectorAll('nav a'),
+            footerLinks: document.querySelectorAll('.footer-links a'),
+            postsGrid: document.querySelector('.posts-grid'),
+            gallery: document.querySelector('.gallery'),
+            fileList: document.getElementById('fileList'),
+            articleDetail: document.getElementById('articleDetail'),
+            dropArea: document.getElementById('dropArea'),
+            fileInput: document.getElementById('fileInput'),
+            uploadBtn: document.getElementById('uploadBtn'),
+            fileName: document.getElementById('fileName'),
+            fileDescription: document.getElementById('fileDescription'),
+            exploreBtn: document.getElementById('exploreBtn')
+        };
+        
+        // 初始化应用
+        function initApp() {
+            // 检查用户登录状态
+            checkLoginStatus();
+            
+            // 渲染文章列表
+            renderArticles();
+            
+            // 渲染图片库
+            renderGallery();
+            
+            // 渲染文件列表
+            renderFiles();
+            
+            // 设置事件监听器
+            setupEventListeners();
+        }
+        
+        // 检查登录状态
+        function checkLoginStatus() {
+            const user = localStorage.getItem('currentUser');
+            if (user) {
+                state.currentUser = JSON.parse(user);
+                updateUserSection();
+            }
+        }
+        
+        // 更新用户界面
+        function updateUserSection() {
+            if (state.currentUser) {
+                const username = state.currentUser.username;
+                dom.userSection.innerHTML = `
+                    <div class="user-info">
+                        <div class="user-avatar">${username.charAt(0).toUpperCase()}</div>
+                        <span>${username}</span>
+                        <button class="user-action" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
+                    </div>
+                `;
+                
+                document.getElementById('logoutBtn').addEventListener('click', logout);
+            } else {
+                dom.userSection.innerHTML = `
+                    <button class="user-action" id="loginBtn"><i class="fas fa-sign-in-alt"></i> 登录</button>
+                `;
+                document.getElementById('loginBtn').addEventListener('click', openLoginModal);
+            }
+        }
+        
+        // 渲染文章列表
+        function renderArticles() {
+            dom.postsGrid.innerHTML = '';
+            
+            articles.forEach(article => {
+                const articleCard = document.createElement('article');
+                articleCard.className = 'post-card';
+                articleCard.innerHTML = `
+                    <div class="post-img" style="background-image: url('${article.image}')"></div>
+                    <div class="post-content">
+                        <h3>${article.title}</h3>
+                        <div class="post-meta">
+                            <span>📅 ${article.date}</span>
+                            <span>🕒 ${article.readTime}</span>
+                            <span>🏷️ ${article.category}</span>
+                        </div>
+                        <p class="post-excerpt">${article.excerpt}</p>
+                        <button class="btn" data-article-id="${article.id}">阅读全文</button>
+                    </div>
+                `;
+                dom.postsGrid.appendChild(articleCard);
+                
+                articleCard.querySelector('.btn').addEventListener('click', function() {
+                    showArticleDetail(article.id);
+                });
+            });
+        }
+        
+        // 渲染图片库
+        function renderGallery() {
+            dom.gallery.innerHTML = '';
+            
+            galleryImages.forEach(image => {
+                const imgElement = document.createElement('div');
+                imgElement.className = 'gallery-item';
+                imgElement.style.backgroundImage = `url('${image}')`;
+                dom.gallery.appendChild(imgElement);
+            });
+        }
+        
+        // 渲染文件列表
+        function renderFiles() {
+            dom.fileList.innerHTML = '';
+            
+            files.forEach(file => {
+                const fileElement = document.createElement('div');
+                fileElement.className = 'post-card';
+                fileElement.innerHTML = `
+                    <div class="post-content">
+                        <h3>${file.name}</h3>
+                        <div class="post-meta">
+                            <span>📦 ${file.size}</span>
+                            <span>⬇️ ${file.downloads} 次下载</span>
+                        </div>
+                        <p class="post-excerpt">${file.description}</p>
+                        <button class="btn" data-file-id="${file.id}">下载文件</button>
+                    </div>
+                `;
+                dom.fileList.appendChild(fileElement);
+                
+                fileElement.querySelector('.btn').addEventListener('click', function() {
+                    downloadFile(file.id);
+                });
+            });
+        }
+        
+        // 显示文章详情
+        function showArticleDetail(articleId) {
+            const article = articles.find(a => a.id === articleId);
+            if (!article) return;
+            
+            state.selectedArticle = article;
+            
+            dom.articleDetail.innerHTML = `
+                <div class="article-header">
+                    <h1 class="article-title">${article.title}</h1>
+                    <div class="article-meta">
+                        <span>📅 ${article.date}</span>
+                        <span>🕒 ${article.readTime}</span>
+                        <span>🏷️ ${article.category}</span>
+                        <span>👤 ${state.currentUser ? state.currentUser.username : '访客'}</span>
+                    </div>
+                    <img src="${article.image}" alt="${article.title}" style="width:100%; border-radius:8px;">
+                </div>
+                <div class="article-content" id="articleContent"></div>
+                <div style="margin-top:2rem;">
+                    <button class="btn" id="backToArticles">返回文章列表</button>
+                </div>
+            `;
+            
+            // 渲染Markdown内容
+            document.getElementById('articleContent').innerHTML = marked.parse(article.content);
+            
+            // 显示文章详情页
+            showPage('articleDetail');
+            
+            // 返回按钮事件
+            document.getElementById('backToArticles').addEventListener('click', function() {
+                showPage('articles');
+            });
+        }
+        
+        // 下载文件
+        function downloadFile(fileId) {
+            const file = files.find(f => f.id === fileId);
+            if (!file) return;
+            
+            alert(`开始下载: ${file.name}\n由于GitHub Pages限制，实际下载功能需后端支持`);
+        }
+        
+        // 打开登录模态框
+        function openLoginModal() {
+            state.isLoginModalOpen = true;
+            state.isLoginMode = true;
+            updateAuthModal();
+            dom.authModal.classList.add('active');
+        }
+        
+        // 关闭登录模态框
+        function closeLoginModal() {
+            state.isLoginModalOpen = false;
+            dom.authModal.classList.remove('active');
+            dom.username.value = '';
+            dom.password.value = '';
+            dom.authMessage.style.display = 'none';
+        }
+        
+        // 更新登录模态框
+        function updateAuthModal() {
+            if (state.isLoginMode) {
+                dom.authTitle.textContent = '用户登录';
+                dom.authAction.textContent = '登录';
+                dom.switchAuth.textContent = '切换到注册';
+            } else {
+                dom.authTitle.textContent = '用户注册';
+                dom.authAction.textContent = '注册';
+                dom.switchAuth.textContent = '切换到登录';
+            }
+        }
+        
+        // 用户登录
+        function login() {
+            const username = dom.username.value.trim();
+            const password = dom.password.value.trim();
+            
+            if (!username || !password) {
+                showAuthMessage('请输入用户名和密码');
+                return;
+            }
+            
+            // 在实际应用中，这里会发送请求到服务器
+            // 这里我们模拟登录过程
+            localStorage.setItem('currentUser', JSON.stringify({ username }));
+            state.currentUser = { username };
+            
+            showAuthMessage('登录成功！', 'success');
+            
+            setTimeout(() => {
+                closeLoginModal();
+                updateUserSection();
+            }, 1500);
+        }
+        
+        // 用户注册
+        function register() {
+            const username = dom.username.value.trim();
+            const password = dom.password.value.trim();
+            
+            if (!username || !password) {
+                showAuthMessage('请输入用户名和密码');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showAuthMessage('密码长度至少为6位');
+                return;
+            }
+            
+            // 在实际应用中，这里会发送请求到服务器
+            // 这里我们模拟注册过程
+            localStorage.setItem('currentUser', JSON.stringify({ username }));
+            state.currentUser = { username };
+            
+            showAuthMessage('注册成功！', 'success');
+            
+            setTimeout(() => {
+                closeLoginModal();
+                updateUserSection();
+            }, 1500);
+        }
+        
+        // 用户注销
+        function logout() {
+            localStorage.removeItem('currentUser');
+            state.currentUser = null;
+            updateUserSection();
+            showPage('home');
+        }
+        
+        // 显示认证消息
+        function showAuthMessage(message, type = 'error') {
+            dom.authMessage.textContent = message;
+            dom.authMessage.style.color = type === 'success' ? 'var(--success)' : 'var(--error)';
+            dom.authMessage.style.display = 'block';
+        }
+        
+        // 切换页面
+        function showPage(pageName) {
+            state.currentPage = pageName;
+            
+            // 隐藏所有页面
+            dom.pageContents.forEach(page => {
+                page.style.display = 'none';
+            });
+            
+            // 显示当前页面
+            document.getElementById(`${pageName}Content`).style.display = 'block';
+            
+            // 更新导航激活状态
+            dom.navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            const activeNav = document.querySelector(`nav a[data-page="${pageName}"]`);
+            if (activeNav) {
+                activeNav.classList.add('active');
+            }
+        }
+        
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 主题切换
+            dom.themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                dom.themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+            });
+            
+            // 登录按钮
+            dom.loginBtn && dom.loginBtn.addEventListener('click', openLoginModal);
+            
+            // 关闭模态框
+            dom.closeAuthModal.addEventListener('click', closeLoginModal);
+            
+            // 登录/注册切换
+            dom.switchAuth.addEventListener('click', () => {
+                state.isLoginMode = !state.isLoginMode;
+                updateAuthModal();
+            });
+            
+            // 登录/注册操作
+            dom.authAction.addEventListener('click', () => {
+                if (state.isLoginMode) {
+                    login();
+                } else {
+                    register();
+                }
+            });
+            
+            // 导航链接
+            dom.navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.getAttribute('data-page');
+                    showPage(page);
+                });
+            });
+            
+            // 页脚链接
+            dom.footerLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.getAttribute('data-page');
+                    showPage(page);
+                });
+            });
+            
+            // 文件上传区域
+            dom.dropArea.addEventListener('click', () => {
+                dom.fileInput.click();
+            });
+            
+            dom.fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    dom.uploadBtn.disabled = false;
+                    dom.dropArea.innerHTML = `
+                        <div class="upload-icon">
+                            <i class="fas fa-file"></i>
+                        </div>
+                        <h3>已选择文件: ${this.files[0].name}</h3>
+                        <p>点击上传按钮提交文件</p>
+                    `;
+                }
+            });
+            
+            // 文件上传
+            dom.uploadBtn.addEventListener('click', function() {
+                const fileName = dom.fileName.value.trim();
+                const fileDescription = dom.fileDescription.value.trim();
+                
+                if (!fileName) {
+                    alert('请输入文件名称');
+                    return;
+                }
+                
+                if (!dom.fileInput.files.length) {
+                    alert('请选择要上传的文件');
+                    return;
+                }
+                
+                // 模拟上传过程
+                alert(`文件 "${fileName}" 上传成功！\n由于GitHub Pages限制，实际文件上传需GitHub API支持`);
+                
+                // 重置表单
+                dom.fileName.value = '';
+                dom.fileDescription.value = '';
+                dom.fileInput.value = '';
+                dom.uploadBtn.disabled = true;
+                dom.dropArea.innerHTML = `
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <h3>点击或拖放文件到此处</h3>
+                    <p>支持PDF、ZIP、图片等格式，最大10MB</p>
+                `;
+            });
+            
+            // 探索按钮
+            dom.exploreBtn.addEventListener('click', () => {
+                showPage('articles');
+            });
+            
+            // 点击模态框外部关闭
+            dom.authModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeLoginModal();
+                }
+            });
+        }
+        
+        // 初始化应用
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
 </body>
 </html>
