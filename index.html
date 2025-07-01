@@ -1,62 +1,477 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-<meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>老王分享站 - 多平台资源分享</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        :root {
+            --windows-blue: #0078d7;
+            --mac-silver: #a2aaad;
+            --linux-orange: #fcc624;
+            --android-green: #3ddc84;
+            --games-purple: #9b59b6;
+            --dark-bg: #1e1e1e;
+            --light-text: #f5f5f5;
+            --card-bg: rgba(40, 40, 40, 0.8);
+            --gold: #ffcc00;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            background-attachment: fixed;
+            color: var(--light-text);
+            line-height: 1.6;
+            padding-bottom: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            border-bottom: 4px solid var(--gold);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            color: var(--gold);
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        
+        .header-image {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border-radius: 10px;
+            margin: 20px auto;
+            display: block;
+            border: 2px solid #444;
+        }
+        
+        .warning {
+            background: rgba(231, 76, 60, 0.25);
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            margin: 20px auto;
+            border-radius: 0 8px 8px 0;
+            max-width: 800px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .warning i {
+            color: #e74c3c;
+            margin-right: 15px;
+            font-size: 1.8rem;
+        }
+        
+        .platform-section {
+            margin: 40px 0;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            padding: 10px 20px;
+            margin-bottom: 25px;
+            border-left: 5px solid;
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .windows-title { color: var(--windows-blue); border-color: var(--windows-blue); }
+        .mac-title { color: var(--mac-silver); border-color: var(--mac-silver); }
+        .linux-title { color: var(--linux-orange); border-color: var(--linux-orange); }
+        .android-title { color: var(--android-green); border-color: var(--android-green); }
+        .games-title { color: var(--games-purple); border-color: var(--games-purple); }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .card-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+            border-bottom: 3px solid #444;
+        }
+        
+        .card-content {
+            padding: 20px;
+        }
+        
+        .card-title {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            color: var(--gold);
+        }
+        
+        .card-desc {
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            color: #ccc;
+            min-height: 60px;
+        }
+        
+        .card-link {
+            display: inline-block;
+            background: #444;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s;
+            border: 1px solid #666;
+            font-size: 0.95rem;
+        }
+        
+        .card-link:hover {
+            background: #555;
+            border-color: var(--gold);
+        }
+        
+        .password {
+            display: inline-block;
+            background: rgba(255, 204, 0, 0.15);
+            padding: 6px 12px;
+            border-radius: 4px;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            border: 1px dashed var(--gold);
+        }
+        
+        .password i {
+            color: var(--gold);
+            margin-right: 6px;
+        }
+        
+        .contact {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 40px;
+            border: 1px solid #444;
+        }
+        
+        .contact-title {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            color: var(--gold);
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-top: 15px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+        }
+        
+        .contact-item i {
+            font-size: 1.5rem;
+            margin-right: 10px;
+            color: var(--gold);
+        }
+        
+        .update-info {
+            text-align: center;
+            margin: 25px 0;
+            color: #95a5a6;
+            font-size: 1.1rem;
+            padding: 10px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #95a5a6;
+            font-size: 0.9rem;
+            margin-top: 20px;
+        }
+        
+        .platform-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 8px;
+            font-weight: bold;
+        }
+        
+        .windows-tag { background: var(--windows-blue); }
+        .mac-tag { background: var(--mac-silver); color: #333; }
+        .linux-tag { background: var(--linux-orange); color: #333; }
+        .android-tag { background: var(--android-green); color: #333; }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+    </style>
 </head>
 <body>
-
-<h1>                                                                      老王分享站                                                   </h1>
-<h1>牢大准时肘击，应该是准时更新</h1>
-<img src="https://ts3.tc.mm.bing.net/th/id/OIP-C.2Ayy7tGPgCBQMkm0gG7C1QHaHN?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" width="120" height="150" ><br />
-
-
-
-  
-<h2>不下载，老大会开着直升机在你家坠机</h2>
-
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-crown"></i> 老王分享站</h1>
+            <p class="subtitle">牢大准时肘击，资源准时更新</p>
+            <img src="https://ts3.tc.mm.bing.net/th/id/OIP-C.2Ayy7tGPgCBQMkm0gG7C1QHaHN?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" 
+                 alt="老王分享站" class="header-image">
+            
+            <div class="warning">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>不下载资源？老大会开着直升机在你家坠机！每日更新，资源永存，缺漏必补！</div>
+            </div>
+        </header>
+        
+        <!-- Windows 软件部分 -->
+        <div class="platform-section">
+            <h2 class="section-title windows-title"><i class="fab fa-windows"></i> Windows 软件</h2>
+            <div class="grid">
+                <!-- 图吧工具箱 -->
+                <div class="card">
+                    <img src="https://imgslim.geekpark.net/uploads/image/file/bf/bb/bfbb473777beefd95d0fe14b9b9a6921.png" 
+                         alt="图吧工具箱" class="card-img">
+                    <div class="card-content">
+                        <h3 class="card-title">图吧工具箱</h3>
+                        <p class="card-desc">专业的硬件检测与系统维护工具合集</p>
+                        <a href="https://tb.saop.cc/" class="card-link" target="_blank">立即下载</a>
+                    </div>
+                </div>
+                
+                <!-- 123云盘下载辅助 -->
+                <div class="card">
+                    <img src="https://img.pcsoft.com.cn/soft/202101/142324-5ff6a8dc68380.png" 
+                         alt="123云盘下载辅助" class="card-img">
+                    <div class="card-content">
+                        <h3 class="card-title">123云盘下载辅助</h3>
+                        <p class="card-desc">提升123云盘下载速度的实用工具</p>
+                        <a href="https://wwsz.lanzouu.com/i7d9i300x7ih" class="card-link" target="_blank">下载工具</a>
+                        <div class="password"><i class="fas fa-key"></i> 密码：老王</div>
+                    </div>
+                </div>
+                
+                <!-- Steam -->
+                <div class="card">
+                    <img src="https://tse3-mm.cn.bing.net/th/id/OIP-C.wx9wuu8mvHXnupGRcel3owHaEK?w=298&h=180&c=7&r=0&o=7&pid=1.7&rm=3" 
+                         alt="Steam" class="card-img">
+                    <div class="card-content">
+                        <h3 class="card-title">Steam</h3>
+                        <p class="card-desc">全球最大的数字游戏发行平台</p>
+                        <a href="https://store.steampowered.com/" class="card-link" target="_blank">访问官网</a>
+                    </div>
+                </div>
+                
+                <!-- 瓦特工具箱 -->
+                <div class="card">
+                    <img src="https://itopdog.xyxza.com/softhouse/imgfile/20231125/25140849ewew.png" 
+                         alt="瓦特工具箱" class="card-img">
+                    <div class="card-content">
+                        <h3 class="card-title">瓦特工具箱</h3>
+                        <p class="card-desc">Steam加速神器，免费提升游戏体验</p>
+                        <a href="https://steampp.net/" class="card-link" target="_blank">下载工具</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mac 软件部分 -->
+        <div class="platform-section">
+            <h2 class="section-title mac-title"><i class="fab fa-apple"></i> Mac 软件</h2>
+            <div class="grid">
+                <!-- Final Cut Pro -->
+                <div class="card">
+                    <img src="https://cdn.mos.cms.futurecdn.net/3t8kZ9gYgBQn2wjZ3q3CgZ.jpg" 
+                         alt="Final Cut Pro" class="card-img">
+                    <div class="card-content">
+                        <h3 class="card-title">Final Cut Pro</h3>
+                        <p class="card-desc">专业视频编辑软件，好莱坞级别的剪辑工具</p>
+                        <a href="#" class="card-link" target="_blank">下载软件</a>
+                        <div class="password"><i class="fas fa-key"></i> 密码：macpro</div>
+                    </div>
+                </div>
+                
+                <!-- Adobe Photoshop -->
+                <div class="card">
+                    <img src="https://www.creativebloq.com/sites/default/files/images/2020/05/photoshop.jpg" 
+                         alt="Adobe Photoshop" class="card-img">
+                    <div class="card-content">
+                        <h3 class="card-title">Adobe Photoshop 2024</h3>
+                        <p class="card-desc">全球最强大的图像处理软件</p>
+                        <a href="#" class="card-link" target="_blank">下载软件</a>
+                        <div class="password"><i class="fas fa-key"></i> 密码：adobe2024</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Linux 软件部分 -->
+        <div class="platform-section">
+            <h2 class="section-title linux-title"><i class="fab fa-linux"></i> Linux 软件</h2>
+            <div class="grid">
+                <!-- LibreOffice -->
+                <div class="card">
+                    <img src="https://cdn.liberapay.com/assets/liberapay/logo-v2_black-on-yellow.200x200.png" 
+                         alt="LibreOffice" class="card-img">
+                    <div class="card-content">
+                        <h3 class="card-title">LibreOffice 7.6</h3>
+                        <p class="card-desc">功能强大的免费开源办公套件</p>
+                        <a href="https://www.libreoffice.org/" class="card-link" target="_blank">下载软件</a>
+                    </div>
+                </div>
+                
+                <!-- GIMP -->
+                <div class="card">
+                    <img src="https://www.gimp.org/images/frontpage/wilber-big.png" 
+                         alt="GIMP" class="card-img">
+                    <div class="card-content">
+                        <h3 class="card-title">GIMP 2.10</h3>
+                        <p class="card-desc">开源的图像编辑器，媲美Photoshop</p>
+                        <a href="https://www.gimp.org/" class="card-link" target="_blank">下载软件</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 安卓应用部分 -->
+        <div class="platform-section">
+            <h2 class="section-title android-title"><i class="fab fa-android"></i> 安卓应用</h2>
+            <div class="grid">
+                <!-- MX Player Pro -->
+                <div class="card">
+                    <img src="https://img.etimg.com/thumb/width-1200,height-900,imgsize-118598,resizemode-75,msid-69899755/magazines/panache/mx-player-launches-premium-subscription-service-at-rs-85-per-month.jpg" 
+                         alt="MX Player Pro" class="card-img">
+                    <div class="card-content">
+                        <h3 class="card-title">MX Player Pro</h3>
+                        <p class="card-desc">强大的视频播放器，支持多种格式</p>
+                        <a href="#" class="card-link" target="_blank">下载应用</a>
+                        <div class="password"><i class="fas fa-key"></i> 密码：mxpro</div>
+                    </div>
+                </div>
+                
+                <!-- Solid Explorer -->
+                <div class="card">
+                    <img src="https://images.sftcdn.net/images/t_app-cover-l,f_auto/p/07a0f1b0-96d1-11e6-9547-00163ed833e7/4220163856/solid-explorer-file-manager-screenshot.jpg" 
+                         alt="Solid Explorer" class="card-img">
+                    <div class="card-content">
+                        <h3 class="card-title">Solid Explorer</h3>
+                        <p class="card-desc">功能强大的文件管理器，支持双窗口</p>
+                        <a href="#" class="card-link" target="_blank">下载应用</a>
+                        <div class="password"><i class="fas fa-key"></i> 密码：solidex</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 游戏资源部分 -->
+        <div class="platform-section">
+            <h2 class="section-title games-title"><i class="fas fa-gamepad"></i> 游戏资源</h2>
+            <div class="grid">
+                <!-- Kards 3.03 -->
+                <div class="card">
+                    <img src="https://cdn1.epicgames.com/offer/d34cf6aeceb94c579af0236fe1185b79/EGS_KARDSTheWWIICardGame_1939Games_S1_2560x1440-d1ab5576cc7af354ff628d13ef645fa9" 
+                         alt="Kards 3.03" class="card-img">
+                    <div class="card-content">
+                        <h3 class="card-title">Kards 3.03</h3>
+                        <p class="card-desc">二战题材的集换式卡牌游戏</p>
+                        <a href="https://wwsz.lanzouu.com/iV7dL301sqdc" class="card-link" target="_blank">下载游戏</a>
+                        <div class="password"><i class="fas fa-key"></i> 密码：911</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <p class="update-info">
+            <i class="fas fa-sync-alt"></i> 本站每天更新一次，所有资源永久保存，如有缺漏请及时联系我们
+        </p>
+        
+        <div class="contact">
+            <h3 class="contact-title"><i class="fas fa-address-card"></i> 联系我们</h3>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fab fa-tiktok"></i>
+                    <span>抖音：42219668185</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>邮箱：3958965142@qq.com</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-github"></i>
+                    <span>GitHub：bblbb787</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>老王分享站 © 2023 - 您的全平台资源获取中心</p>
+            <p>牢大准时肘击，资源准时更新 | Windows | MacOS | Linux | Android | 游戏资源</p>
+        </div>
+    </div>
 </body>
 </html>
-<h2>         windows软件：     </h2>
-<img src="https://imgslim.geekpark.net/uploads/image/file/bf/bb/bfbb473777beefd95d0fe14b9b9a6921.png" width="160" height="90" ><br />
-
-图吧工具箱：https://tb.saop.cc/<br />
-<img src="https://img.pcsoft.com.cn/soft/202101/142324-5ff6a8dc68380.png" width="320" height="180" ><br />
-
-123云盘下载辅助：https://wwsz.lanzouu.com/i7d9i300x7ih    密码：老王<br />
-<img src="https://tse3-mm.cn.bing.net/th/id/OIP-C.wx9wuu8mvHXnupGRcel3owHaEK?w=298&h=180&c=7&r=0&o=7&pid=1.7&rm=3" width="320" height="180" ><br />
-
-steam：https://store.steampowered.com/<br />
-<img src="https://tse4-mm.cn.bing.net/th/id/OIP-C.panMiE90ZFpWbDWmJckM8wHaDt?w=349&h=174&c=7&r=0&o=7&pid=1.7&rm=3" width="320" height="180" ><br />
-
-瓦特工具箱(steam加速神器免费）:https://steampp.net/<br />
-<img src="https://itopdog.xyxza.com/softhouse/imgfile/20231125/25140849ewew.png" width="320" height="180" ><br />
-
-Scratch3(少儿编程):https://wwsz.lanzouu.com/iNo9K300z91e  密码：我帅<br />
-<img src="https://mirai-tc.com/wp-content/uploads/2021/04/Wikipedia.jpg" width="320" height="180" ><br />
-
-deepSeek：https://www.deepseek.com/<br />
-<img src="https://ai-to.cn/wp-content/uploads/2025/02/1740295080-Deepseek-R1.jpg" width="320" height="180" ><br />
-
-QQ：https://im.qq.com/index/<br />
-<img src="https://img3.downza.cn/xueyuan/202306/110811-647ff49bbfae9.jpg" width="320" height="180" ><br />
-
-winRAR：https://wwsz.lanzouu.com/ij3l73010jgf       密码:78<br />
-<img src="https://www.toprender.com/data/attachment/forum/202204/03/213057dyph63hz06jphk36.jpg" width="320" height="180" ><br />
-
-
-
-<h2>windows游戏</h2>
-kards3.03:https://wwsz.lanzouu.com/iV7dL301sqdc   密码:911<br />
-<img src="https://cdn1.epicgames.com/offer/d34cf6aeceb94c579af0236fe1185b79/EGS_KARDSTheWWIICardGame_1939Games_S1_2560x1440-d1ab5576cc7af354ff628d13ef645fa9" width="320" height="180" ><br />
-<br />
-<h2>黑苹果工具</h2>
-RapidEFI：https://pan.mfpud.com/RapidEFI<br />
-<img src="https://cdn.mfpud.com/static/2023/12/1704011238-c6a6a5a912678ae.jpg" width="320" height="180" ><br />
-<br />
-<br />
-<br />
-<br />
-本站每天更新一次，之前资源不会清除，如有缺漏通过以下方式联系我<br />
-抖音：42219668185<br />
-邮箱：3958965142@qq.com<br />
-GitHub：bblbb787<br />
